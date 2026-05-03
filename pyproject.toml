@@ -1,0 +1,15 @@
+[project]
+name = "adk-stats-agent-demo-v2"
+version = "0.1.0"
+description = "Native ADK Multi-Agent Statistical Analysis System"
+dependencies = [
+    "pandas",
+    "scikit-learn",
+    "statsmodels",
+    "xgboost",
+    "scipy",
+    "pyarrow",
+    "fastparquet",
+    "google-adk",
+    "python-dotenv"
+]

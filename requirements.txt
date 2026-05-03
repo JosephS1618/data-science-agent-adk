@@ -1,0 +1,9 @@
+pandas
+scikit-learn
+statsmodels
+xgboost
+scipy
+pyarrow
+fastparquet
+google-adk
+python-dotenv
