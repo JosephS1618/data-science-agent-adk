@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import duckdb
 
 SANDBOX_DIR = "/Users/josephsong/Desktop/Projects/Personal/adk-stats-agent-demo-v2/_sandbox"
 
@@ -45,3 +46,35 @@ def clean_datasets(transaction_filename: str = "sample.csv", customer_filename: 
         "transactions_columns": df_trans.columns.tolist(),
         "customers_columns": df_cust.columns.tolist()
     }
+
+def execute_sql_query(query: str) -> dict:
+    """
+    Executes a raw SQL query against the clean parquet files.
+    The environment has two virtual tables ready for you: `transactions` and `customers`.
+    Write standard SQL like: SELECT * FROM customers WHERE ...
+    """
+    try:
+        conn = duckdb.connect(database=':memory:')
+        trans_path = os.path.join(SANDBOX_DIR, "clean_sample.parquet")
+        cust_path = os.path.join(SANDBOX_DIR, "clean_customers.parquet")
+        
+        if os.path.exists(trans_path):
+            conn.execute(f"CREATE VIEW transactions AS SELECT * FROM '{trans_path}'")
+        if os.path.exists(cust_path):
+            conn.execute(f"CREATE VIEW customers AS SELECT * FROM '{cust_path}'")
+            
+        result = conn.execute(query).fetchdf()
+        
+        # Safe JSON serialization handling
+        result = result.where(pd.notnull(result), None)
+        for col in result.select_dtypes(include=['datetime64[ns]', 'datetime64[ns, UTC]', '<M8[ns]']).columns:
+            result[col] = result[col].astype(str)
+            
+        records = result.to_dict(orient='records')
+        return {"results": records}
+        
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        if 'conn' in locals():
+            conn.close()

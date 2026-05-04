@@ -181,7 +181,7 @@ def get_top_ngrams(filepath: str, text_column: str, n: int) -> dict:
     X = vectorizer.fit_transform(texts)
     
     sum_words = X.sum(axis=0)
-    words_freq = [(word, sum_words[0, idx]) for word, idx in vectorizer.vocabulary_.items()]
+    words_freq = [(word, int(sum_words[0, idx])) for word, idx in vectorizer.vocabulary_.items()]
     words_freq = sorted(words_freq, key=lambda x: x[1], reverse=True)
     
     return {"top_ngrams": words_freq[:10]}
@@ -198,7 +198,7 @@ def calculate_correlation_matrix(filepath: str, col_a: str, col_b: str) -> dict:
     return {
         "correlation_coefficient": float(corr),
         "p_value": float(p_value),
-        "significant_at_0_05": p_value < 0.05
+        "significant_at_0_05": bool(p_value < 0.05)
     }
 
 def run_linear_regression(filepath: str, independent_var: str, dependent_var: str) -> dict:

@@ -11,5 +11,6 @@ dependencies = [
     "pyarrow",
     "fastparquet",
     "google-adk",
-    "python-dotenv"
+    "python-dotenv",
+    "duckdb>=1.5.2",
 ]
