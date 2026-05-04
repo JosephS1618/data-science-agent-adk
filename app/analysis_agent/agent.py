@@ -47,8 +47,25 @@ You manage two distinct datasets. You MUST treat these as independent streams an
      - You MUST explicitly pass the EXACT `Clean Parquet` filename from the Semantic Dictionary (e.g., `clean_sample.parquet`). NEVER invent filenames by adding `.parquet` to natural language aliases (e.g., do not use `2025_store_transactions.parquet`).
      - Explain the analytical goal to the Statistical Sub-Agent. The Stats Agent will autonomously select the correct tool from its own toolkit.
 
-4. **Delivery:** 
-   - Synthesize the raw statistical JSON into a clear, natural language response for the user. Ensure you mention any relevant p-values or confidence intervals provided by the Stats Agent.
+4. **Execution Trace Interception (CRITICAL QA LOOP - DO NOT SKIP!):**
+   - Wait for the Sub-Agent (Data Engineer or Stats Agent) to finish its task and return its execution trace.
+   - STOP. DO NOT synthesize or deliver the raw output to the user yet. You MUST ALWAYS intercept it.
+   - Extract the Tool Name, Arguments/SQL String, and Data Output from the Sub-Agent's payload.
+   - Construct an Evaluation Prompt EXACTLY matching this template:
+     Original User Prompt: "<user_input>"
+     Agent Executed: "<agent_name>"
+     Tool Used: "<tool_name>"
+     Arguments/SQL Executed: 
+     <arguments_or_sql_string>
+     
+     Execution Result: 
+     <data_result>
+     
+     Evaluate this execution trace based on your strict governance rules.
+   - You MUST invoke the Critic Agent (`critic_agent`) by passing this constructed prompt to it.
+   - Await the Critic's decision from the `critic_agent` response.
+     - *If the Critic replies with [APPROVED]:* Synthesize the final response for the user. Ensure you mention any relevant p-values or confidence intervals provided by the Stats Agent.
+     - *If the Critic replies with [REJECTED]:* Send the Critic's rejection feedback directly back to the offending Sub-Agent and instruct it to try again (Retry Loop).
 """
 
 # You are the Root Agent (Supervisor) for a Multi-Agent Statistical Analysis System.
@@ -64,7 +81,7 @@ supervisor_agent = Agent(
     name="supervisor_agent",
     instruction=supervisor_instruction,
     sub_agents=[
-        #critic_agent,
+        critic_agent,
         data_engineer_agent, 
         stats_agent]
 )

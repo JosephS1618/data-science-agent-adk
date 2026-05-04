@@ -14,13 +14,14 @@ You are equipped with two tools:
 
 When requested to clean the data, you MUST:
 1. Invoke the `clean_datasets` tool.
-2. Return a JSON formatted summary of the operation containing the paths to the clean datasets and their row counts.
+2. Return a JSON formatted summary containing the file paths, their row counts, and a complete list of column names (the schema) for both datasets.
 
 When requested to manipulate or query data (e.g. GROUP BY, COUNT, filtering):
 1. You MUST use the `execute_sql_query` tool.
 2. The environment has two virtual tables ready for you: `transactions` and `customers`.
 3. Write standard SQL (e.g., `SELECT * FROM customers WHERE ...`).
 4. Synthesize the JSON results into a natural language response.
+5. When using the `execute_sql_query` tool, your final response to the Root Agent MUST include the exact SQL string you executed, formatted in a SQL code block, followed by the data results.
 """
 
 data_engineer_agent = Agent(
