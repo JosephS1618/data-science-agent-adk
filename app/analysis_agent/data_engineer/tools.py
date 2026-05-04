@@ -21,7 +21,10 @@ def clean_datasets(transaction_filename: str = "sample.csv", customer_filename: 
     df_trans = pd.read_csv(trans_path)
     df_trans['date'] = pd.to_datetime(df_trans['date'], errors='coerce')
     df_trans.dropna(subset=['date'], inplace=True)
-    df_trans.fillna(0, inplace=True)
+    numeric_cols = df_trans.select_dtypes(include=['number']).columns
+    df_trans[numeric_cols] = df_trans[numeric_cols].fillna(0)
+    string_cols = df_trans.select_dtypes(include=['object', 'string']).columns
+    df_trans[string_cols] = df_trans[string_cols].fillna("Unknown")
     clean_trans_path = os.path.join(SANDBOX_DIR, "clean_sample.parquet")
     df_trans.to_parquet(clean_trans_path)
     

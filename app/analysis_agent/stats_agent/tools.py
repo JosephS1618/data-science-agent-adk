@@ -15,10 +15,21 @@ SANDBOX_DIR = "/Users/josephsong/Desktop/Projects/Personal/adk-stats-agent-demo-
 def load_parquet(filepath: str) -> pd.DataFrame:
     """Helper to load a parquet file"""
     basename = os.path.basename(filepath)
+    
+    # Auto-correct if the agent hallucinates the CSV extension
+    if basename.endswith(".csv"):
+        basename = basename.replace(".csv", ".parquet")
+        if not basename.startswith("clean_"):
+            basename = "clean_" + basename
+            
     actual_path = os.path.join(SANDBOX_DIR, basename)
     if not os.path.exists(actual_path):
-        raise FileNotFoundError(f"File {basename} not found in sandbox.")
-    return pd.read_parquet(actual_path)
+        raise FileNotFoundError(f"File {basename} not found in sandbox. You MUST use the .parquet files provided by the Data Engineer.")
+    
+    try:
+        return pd.read_parquet(actual_path)
+    except Exception as e:
+        raise ValueError(f"Failed to read {basename} as parquet. Is it a valid Parquet file? Error: {str(e)}")
 
 def forecast_time_series(filepath: str, target_col: str, periods: int) -> dict:
     """Uses statsmodels (ARIMA) to forecast metrics like revenue or profit over time. Returns forecast and confidence intervals."""
@@ -53,8 +64,10 @@ def predict_probability(filepath: str, target_event: str) -> dict:
         numeric_cols.remove(target_event)
         
     X = df[numeric_cols].fillna(0)
-    # Assume target_event is already binary 0/1 for simplicity
-    y = df[target_event].astype(int)
+    # Encode target_event safely (e.g. "Yes"/"No" to 1/0)
+    from sklearn.preprocessing import LabelEncoder
+    le = LabelEncoder()
+    y = le.fit_transform(df[target_event].astype(str))
     
     model = xgb.XGBClassifier(use_label_encoder=False, eval_metric='logloss')
     model.fit(X, y)
@@ -85,18 +98,17 @@ def cluster_entities(filepath: str, feature_cols: list[str], k_clusters: int) ->
         "features_used": feature_cols
     }
 
-def calculate_rfm_scores(filepath: str) -> dict:
+def calculate_rfm_scores(filepath: str, customer_col: str, date_col: str, revenue_col: str) -> dict:
     """Uses Pandas to segment customers by Recency, Frequency, and Monetary value."""
-    # Assuming transactions file with customer_id, date, revenue
     df = load_parquet(filepath)
-    if not all(col in df.columns for col in ['customer_id', 'date', 'revenue']):
-        return {"error": "Missing required columns: customer_id, date, revenue"}
+    if not all(col in df.columns for col in [customer_col, date_col, revenue_col]):
+        return {"error": f"Missing required columns. Found: {df.columns.tolist()}"}
     
-    max_date = df['date'].max()
-    rfm = df.groupby('customer_id').agg({
-        'date': lambda x: (max_date - x.max()).days,
-        'customer_id': 'count',
-        'revenue': 'sum'
+    max_date = df[date_col].max()
+    rfm = df.groupby(customer_col).agg({
+        date_col: lambda x: (max_date - x.max()).days,
+        customer_col: 'count',
+        revenue_col: 'sum'
     })
     rfm.columns = ['Recency', 'Frequency', 'Monetary']
     
