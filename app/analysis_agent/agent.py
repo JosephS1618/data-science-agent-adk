@@ -5,6 +5,7 @@ from google.adk.agents import Agent
 from .data_engineer.agent import data_engineer_agent
 from .stats_agent.agent import stats_agent
 from .critic_agent.agent import critic_agent
+from .critic_agent.tools import invoke_critic_agent
 
 MODEL = os.getenv("ADK_MODEL", "gemini-2.0-flash")
 
@@ -20,12 +21,14 @@ You manage two distinct datasets. You MUST treat these as independent streams an
    - *Raw Source:* `sample.csv`
    - *Clean Parquet:* `clean_sample.parquet`
    - *SQL Table Name:* `transactions`
+   - *Exact Columns:* date, revenue, costs, profit, tax, shipping, transactions
 
 2. **Customers Dataset** (Entity-Level data, subscriptions from 2020-2021)
    - *Natural Language Aliases:* "customer dataset", "users", "subscribers", "subscriptions"
    - *Raw Source:* `customers-1000.csv`
    - *Clean Parquet:* `clean_customers.parquet`
    - *SQL Table Name:* `customers`
+   - *Exact Columns:* Index, Customer Id, First Name, Last Name, Company, City, Country, Phone 1, Phone 2, Email, Subscription Date, Website
 
 **Execution Workflow:**
 
@@ -40,10 +43,23 @@ You manage two distinct datasets. You MUST treat these as independent streams an
    - If the user asks for a metric that does not exactly match a column in the schema, you must politely inform the user that the data is missing or ask for clarification. DO NOT guess or invent column names.
 
 3. **Analysis Delegation (Routing Rules):**
-   - **If the user asks for basic data aggregation, filtering, grouping, counting, or sorting** (e.g., "count users by country", "total revenue by month", "top 5 products"): 
+   - **ONLY IF the user asks for basic data aggregation, filtering, grouping, counting, or sorting** (e.g., "count users by country", "total revenue by month", "top 5 products"): 
      - Delegate to the **Data Engineer Sub-Agent** to execute a SQL query.
+     - DO NOT use SQL for statistical tasks that the stats_agent can perform. 
    - **If the user asks for advanced mathematical modeling** (e.g., forecasting, anomaly detection, clustering, correlation, regression):
      - Delegate to the **Statistical Sub-Agent** (`stats_agent`).
+     - Tools available: 
+        - forecast_time_series
+        - predict_probability
+        - cluster_entities
+        - calculate_rfm_scores
+        - detect_anomalies_isolation_forest
+        - calculate_z_scores
+        - extract_topics
+        - get_top_ngrams
+        - calculate_correlation_matrix
+        - run_linear_regression
+        - generate_cohort_retention_matrix  
      - You MUST explicitly pass the EXACT `Clean Parquet` filename from the Semantic Dictionary (e.g., `clean_sample.parquet`). NEVER invent filenames by adding `.parquet` to natural language aliases (e.g., do not use `2025_store_transactions.parquet`).
      - Explain the analytical goal to the Statistical Sub-Agent. The Stats Agent will autonomously select the correct tool from its own toolkit.
 
@@ -62,8 +78,8 @@ You manage two distinct datasets. You MUST treat these as independent streams an
      <data_result>
      
      Evaluate this execution trace based on your strict governance rules.
-   - You MUST invoke the Critic Agent (`critic_agent`) by passing this constructed prompt to it.
-   - Await the Critic's decision from the `critic_agent` response.
+   - You MUST invoke the Critic Agent (`invoke_critic_agent`) by passing this constructed prompt to the `evaluation_prompt` argument.
+   - Await the Critic's decision from the `invoke_critic_agent` response.
      - *If the Critic replies with [APPROVED]:* Synthesize the final response for the user. Ensure you mention any relevant p-values or confidence intervals provided by the Stats Agent.
      - *If the Critic replies with [REJECTED]:* Send the Critic's rejection feedback directly back to the offending Sub-Agent and instruct it to try again (Retry Loop).
 """
@@ -80,8 +96,8 @@ supervisor_agent = Agent(
     model=MODEL,
     name="supervisor_agent",
     instruction=supervisor_instruction,
+    tools=[invoke_critic_agent],
     sub_agents=[
-        critic_agent,
         data_engineer_agent, 
         stats_agent]
 )

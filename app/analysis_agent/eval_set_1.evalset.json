@@ -1,0 +1,269 @@
+{
+  "eval_set_id": "eval_set_1",
+  "name": "eval_set_1",
+  "eval_cases": [
+    {
+      "eval_id": "eval1",
+      "conversation": [
+        {
+          "invocation_id": "e-553011ed-be1a-4734-b95a-9432de279b2a",
+          "user_content": {
+            "parts": [
+              {
+                "text": "Based on historical data, what is our projected daily revenue for the next month?"
+              }
+            ],
+            "role": "user"
+          },
+          "final_response": {
+            "parts": [
+              {
+                "text": "I used the `forecast_time_series` tool with the `clean_sample.parquet` file, targeting the `revenue` column, and forecasting for 30 periods (days).\n\nHere is the projected daily revenue for the next month:\n\n**Forecasted Daily Revenue:**\n[31641.76, 31666.38, 31677.65, 31682.81, 31685.18, 31686.26, 31686.75, 31686.98, 31687.08, 31687.13, 31687.15, 31687.16, 31687.17, 31687.17, 31687.17, 31687.17, 31687.17, 31687.17, 31687.17, 31687.17, 31687.17, 31687.17, 31687.17, 31687.17, 31687.17, 31687.17, 31687.17, 31687.17, 31687.17, 31687.17]\n\n**95% Confidence Intervals for Daily Revenue (Lower Bound, Upper Bound):**\n[[28131.19, 35152.34], [27493.46, 35839.31], [27178.70, 36176.60], [26965.56, 36400.07], [26792.61, 36577.75], [26638.30, 36734.22], [26494.02, 36879.48], [26356.04, 37017.93], [26222.58, 37151.58], [26092.78, 37281.48], [25966.14, 37408.17], [25842.33, 37532.00], [25721.12, 37653.21], [25602.36, 37771.98], [25485.87, 37888.47], [25371.54, 38002.81], [25259.24, 38115.10], [25148.87, 38225.47], [25040.33, 38334.01], [24933.54, 38440.80], [24828.41, 38545.93], [24724.87, 38649.48], [24622.84, 38751.50], [24522.27, 38852.07], [24423.09, 38951.25], [24325.25, 39049.10], [24228.69, 39145.66], [24133.58, 39240.98], [24039.22, 39335.12], [23946.23, 39428.12]]",
+                "thought_signature": "CtkDAY89a194zYy0vRUIhRnNDj_N_5fafJMxIjk0LCZ72pbcmsGP15kVSKZKluE86ZNb-osfklloBh_JS2_jvYfh84upJppuULqTBuzXQTG9VqINp4jzRLrqWY6CNxzRmTq4Hu2ifuaFRKqKUajnQyAvAUXJvVxyq2cqUpishiFMWtaRgP-7628kpXcR539It0KdAPoTCyRwhQSOBTnciu3ekoMoyixwM9753xOIe936O0sWPZDr35s8gUt2qqy-9Q5r4m6Uup8_OnNtrIcWFkhdNO1yvXvPz8D1vxWEtUI1pa0hbqn7kzHUue-ha88O2MHCmbB7L0622ymuNN3pg7HikPvkB1kLpBue1sklJgCpYNhkS1OeyvjXKnurUGMFsSgD10aSomCMmHDlbVR9sayStDH_DltUeTCjBSrXetiX0H3K-XKacYi6mPhz1M6zyXCrluA60_Hn7YbWy5yIzK96odmHuYmj39Dudz5zTTP9jY-yeJIrt7L0qJZo3Ceyc7CT3Y8SX7FmUNDMQKcCcjK1EiVLGFq_YL_4uT67te6oOP46PCeKqgqyzLmotuDuTxT7c_emdLtLqEj8hZATe3pRnglHXJWPGtrgRSu6KyOykmjHIeuRzNyW4w8="
+              }
+            ],
+            "role": "model"
+          },
+          "intermediate_data": {
+            "invocation_events": [
+              {
+                "author": "supervisor_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-79d8c2f9-5223-4a3b-b574-ebcd3514af01",
+                        "args": {
+                          "agent_name": "stats_agent"
+                        },
+                        "name": "transfer_to_agent"
+                      },
+                      "thought_signature": "CucCAY89a1_nBxGhQRfcOmYCDhYIvfYFLdkrXOyqCTMItY0Ref129td6d5Yfxbvbk1w-1_7B2i0ExmRVfCkbUN8j2UnopnfXHqe4brViAxX3WyodnZ2egKe9yVLPyEyMM3AnLsKyELtfjhl0vXXzVI16lzFQYWBoBV5vlViEtVw9iFZM0hPI6uPiwCI-SA6RsNaJUy0h8oOP2XLM_k3MAijnCEIIGYB3VO4PjQ68zZFjuCePJ8hy6MVKMxL0hnMAvY9EXB-9PahpXVKITGFAUUiAK2wrmHqo-b8uMVzgCu8T0oOL0UbIK_6vTrSn2eXknjPAwukL5KQHG-FhXLkn-UZqn-Clq7P3o9Lzz6jtDc0I_zOR4QoBVDYZhmkA_uSoKtJrTrvD08UcFGZ5vUpBW4wPPcgk2po_hNhcTckXQlvPsEx3P-6w3tVj_3w6UuUYNYsMXKYlx8Km6oN6d3GXVEwXsEQ20QijX_k="
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "supervisor_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-79d8c2f9-5223-4a3b-b574-ebcd3514af01",
+                        "name": "transfer_to_agent",
+                        "response": {
+                          "result": null
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "stats_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "adk-d75cad48-2529-422a-ab86-66d31e552792",
+                        "args": {
+                          "filepath": "clean_sample.parquet",
+                          "target_col": "revenue",
+                          "periods": 30
+                        },
+                        "name": "forecast_time_series"
+                      },
+                      "thought_signature": "CsgGAY89a18SgnedT3qliWfoX5lk-jAS0HRyX8Foo-TT_KPrFr8I0xxX9YjIQZKDh0iL45_yVw9jMD0Gl7nYInSElZpGuEetjsvHsh6HH_IaJ3mQllEiT0mS87nzC6BsIg-ExfajkHQrzGpeO-eC286--1U3SCeTqIDgwMMi-tpvAVEMUA285KAVZ-hF-mCbqHdKt1W-Mcqn0ccmB8bavxg_WY4ZOWcgK0eu7FAutvUIbsp7s8tMxNeFwCVk0N_Q8A5VBEGHJz9jWqjkpXBkFTQ-7MKUqwXlHTbwBKVbI-B0OBzlReXp-BPAnNdVHjqVvsals70FiAJ6nX7TeLKzOPPf-DKJrRDShcOdcYmMCcinW5H0jewpfB6_Pr4MoE1GkCg2scdTzZRJpnTGnLViZ6_lohC36eG0xZcZdC7fQP8OHAFvFV78eaJBkyU7qYuhr87LYy4nDWyCDLb9Iq7AzJ65Lkg7abgAGzKVRpwkRN_s4mHp2td7Oku5cM2KTWyrD0FUjAKD_eXAvd4XgBQ3UY259yPwSpx_NcfE8lZvnVxzHmqofXg78_hnIcPZb5IKraW2QG4hpjGCz_Xji2rs_MKR947iLM0hx8mBeQStVJhLy6VstTFfVa3ECcm3TUcEjciv5itlkbz22Nj49dO2zum98lLtrqnV91b7IXKIui-SDrZ0AXc8fACYiAErGbfYq9SZpyjif3wXcC96csugN56IBBT7B2Qx0Q21m3aUVZF5el8YKLW51Mf6Q2jsETaFdKxtMpnU3J6Pk1FwOhZhotZpT3V7aBV3cfIO5-jt31ergMJq3-pWfvAm7ySbN5j5mNZcrmrfmwNJitxSB0c7rsVTeZhcBLrgu4oED_vBSIT_o8j6qXysSJFyhOI09W57tuzre8-P51yy98TcNCfUr55H587g7nI_4UIOS3Vsw4lYiCv5s05e_IHJvUuF_vNbFlGkKxFmTxKnAn8zDQY_AIeO6jgnasH0l1AH4T3D-9KjvjdenldIX-YVhUf-cKbI_wzlxUwoBdVsSGejZ5V6jqCWd2BjFT3x7hOdR9QhQ-oRxpt0pKasBT8L_efCuhy5Q5oYmZvANZ8yfLcs_g6E5WiXloPlA6VPXv4g"
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "stats_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "adk-d75cad48-2529-422a-ab86-66d31e552792",
+                        "name": "forecast_time_series",
+                        "response": {
+                          "forecast": [
+                            31641.764293243894,
+                            31666.381196250793,
+                            31677.65246714618,
+                            31682.81321167857,
+                            31685.176147001108,
+                            31686.25805743156,
+                            31686.75342866257,
+                            31686.98024286974,
+                            31687.08409364135,
+                            31687.1316434968,
+                            31687.153415012966,
+                            31687.163383474737,
+                            31687.167947705784,
+                            31687.170037517186,
+                            31687.170994373148,
+                            31687.171432486048,
+                            31687.171633083548,
+                            31687.17172493055,
+                            31687.171766984276,
+                            31687.171786239294,
+                            31687.171795055536,
+                            31687.1717990922,
+                            31687.171800940458,
+                            31687.171801786713,
+                            31687.171802174187,
+                            31687.171802351597,
+                            31687.17180243283,
+                            31687.17180247002,
+                            31687.17180248705,
+                            31687.171802494846
+                          ],
+                          "conf_int": [
+                            [
+                              28131.188253544155,
+                              35152.34033294363
+                            ],
+                            [
+                              27493.45638006208,
+                              35839.306012439505
+                            ],
+                            [
+                              27178.700292530957,
+                              36176.604641761405
+                            ],
+                            [
+                              26965.559529116137,
+                              36400.066894241005
+                            ],
+                            [
+                              26792.60525192181,
+                              36577.7470420804
+                            ],
+                            [
+                              26638.297010982657,
+                              36734.21910388047
+                            ],
+                            [
+                              26494.02285447089,
+                              36879.484002854246
+                            ],
+                            [
+                              26356.03535518577,
+                              37017.92513055371
+                            ],
+                            [
+                              26222.584401863085,
+                              37151.58378541962
+                            ],
+                            [
+                              26092.78393746328,
+                              37281.47934953032
+                            ],
+                            [
+                              25966.136244916892,
+                              37408.170585109045
+                            ],
+                            [
+                              25842.325284924118,
+                              37532.00148202536
+                            ],
+                            [
+                              25721.12481848579,
+                              37653.21107692578
+                            ],
+                            [
+                              25602.35664882678,
+                              37771.9834262076
+                            ],
+                            [
+                              25485.87107875229,
+                              37888.470909994
+                            ],
+                            [
+                              25371.537348236463,
+                              38002.805516735636
+                            ],
+                            [
+                              25259.238631933003,
+                              38115.10463423409
+                            ],
+                            [
+                              25148.8691739336,
+                              38225.4742759275
+                            ],
+                            [
+                              25040.332465380463,
+                              38334.011068588086
+                            ],
+                            [
+                              24933.53996281852,
+                              38440.80360966007
+                            ],
+                            [
+                              24828.410111177796,
+                              38545.93347893328
+                            ],
+                            [
+                              24724.86755596275,
+                              38649.47604222165
+                            ],
+                            [
+                              24622.842484849134,
+                              38751.50111703178
+                            ],
+                            [
+                              24522.270065176344,
+                              38852.07353839708
+                            ],
+                            [
+                              24423.089956742646,
+                              38951.25364760573
+                            ],
+                            [
+                              24325.245886034587,
+                              39049.09771866861
+                            ],
+                            [
+                              24228.685271798975,
+                              39145.65833306668
+                            ],
+                            [
+                              24133.35889418206,
+                              39240.98471075798
+                            ],
+                            [
+                              24039.220601210174,
+                              39335.123003763925
+                            ],
+                            [
+                              23946.22704750168,
+                              39428.11655748801
+                            ]
+                          ],
+                          "periods": 30,
+                          "target_col": "revenue"
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              }
+            ]
+          },
+          "creation_timestamp": 1777917273.609092
+        }
+      ],
+      "session_input": {
+        "app_name": "analysis_agent",
+        "user_id": "user"
+      },
+      "creation_timestamp": 1777917960.581829
+    }
+  ],
+  "creation_timestamp": 1777917941.539288
+}
